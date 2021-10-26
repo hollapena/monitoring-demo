@@ -17,7 +17,7 @@ let rollbar = new Rollbar({
 let students = []
 
 app.post('/api/student', (req,res) => {
-    const {name} = req.body
+    let {name} = req.body
     name = name.trim()
     students.push(name)
     rollbar.log('student added successfully', {author: 'Callie', type: 'manual entry'})
