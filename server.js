@@ -10,12 +10,25 @@ let rollbar = new Rollbar({
     captureUnhandledRejections: true
 })
 
+let students = []
+
+app.post('/api/student', (req,res) => {
+    const {name} = req.body
+    name = name.trim()
+    students.push(name)
+    rollbar.log('student added successfully', {author: 'Callie', type: 'manual entry'})
+    res.status(200).send(students)
+})
+
 const app = express()
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/index.html'))
     rollbar.info('html file served successfully')
 })
+
+// Placement is important for the error handler...make sure it is below the body, but above the listener
+app.use(rollbar.errorHandler()) 
 
 const port = process.env.PORT || 4545
 
